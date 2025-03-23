@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!-- saved from url=(0096)https://web-sandbox.oaiusercontent.com/index.html?sessionId=a3b07b0f-c4c7-4ec6-8992-b32035890000 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinas Dinlle Live Updates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .widget {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            width: 300px;
+            background: #f9f9f9;
+        }
+    </style>
+<script src="chrome-extension://bojobppfploabceghnmlahpoonbcbacn/injection-topics.js"></script><link rel="stylesheet" href="chrome-extension://bojobppfploabceghnmlahpoonbcbacn/app/content-style.css"></head>
+<body>
+    <h1>Dinas Dinlle Live Updates</h1>
+    <div class="container">
+        
+        <!-- Weather Widget -->
+        <div class="widget" id="weather"><p>Failed to load weather.</p></div>
+        
+        <!-- Tide Widget -->
+        <div class="widget" id="tides"><p>Failed to load tide data.</p></div>
+        
+        <!-- Caernarfon Airport METAR -->
+        <div class="widget">
+            <h2>Caernarfon Airport METAR</h2>
+            <a href="https://metar-taf.com/EGCK" id="metartaf-tWBa6Sos" style="font-size:18px; font-weight:500; color:#000; width:300px; height:435px; display:block">METAR Caernarfon Airport</a>
+            <script async="" defer="" crossorigin="anonymous" src="./EGCK"></script>
+        </div>
+    </div>
+    
+    <script>
+        async function fetchWeather() {
+            try {
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=53.097&longitude=-4.371&current_weather=true');
+                const data = await response.json();
+                document.getElementById("weather").innerHTML = `
+                    <h2>Current Weather</h2>
+                    <p>Temperature: ${data.current_weather.temperature}°C</p>
+                    <p>Wind Speed: ${data.current_weather.windspeed} km/h</p>
+                `;
+            } catch (error) {
+                document.getElementById("weather").innerHTML = "<p>Failed to load weather.</p>";
+            }
+        }
+        
+        async function fetchTides() {
+            try {
+                const response = await fetch('https://api.tideschart.com/v1/tide?latitude=53.097&longitude=-4.371'); // Example API
+                const data = await response.json();
+                document.getElementById("tides").innerHTML = `
+                    <h2>Tide Times</h2>
+                    <p>Next High Tide: ${data.tides[0].time}</p>
+                    <p>Next Low Tide: ${data.tides[1].time}</p>
+                `;
+            } catch (error) {
+                document.getElementById("tides").innerHTML = "<p>Failed to load tide data.</p>";
+            }
+        }
+        
+        fetchWeather();
+        fetchTides();
+    </script>
+
+
+</body></html>
